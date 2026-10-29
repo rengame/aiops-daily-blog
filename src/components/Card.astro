@@ -1,7 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { getPostUrl } from "@/utils/getPostPaths";
-import { toTransitionName } from "@/utils/toTransitionName";
 import Datetime from "./Datetime.astro";
 import Tag from "./Tag.astro";
 import { slugifyStr } from "@/utils/slugify";
@@ -16,7 +15,7 @@ const { title, description, tags, ...props } = data;
     href={getPostUrl(id, filePath, Astro.currentLocale)}
     class="text-foreground hover:text-accent mt-3 inline-block text-xl leading-relaxed font-semibold decoration-dashed underline-offset-4 hover:underline"
   >
-    <Heading transition:name={toTransitionName(id)}>{title}</Heading>
+    <Heading>{title}</Heading>
   </a>
   <p class="text-muted-foreground mt-3 text-sm leading-7">{description}</p>
   <ul class="mt-4 flex flex-wrap gap-x-4 gap-y-2">

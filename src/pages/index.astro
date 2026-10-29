@@ -153,12 +153,13 @@ const latestDate = latest?.data.pubDatetime.toLocaleDateString("zh-CN", {
   <Footer />
 </Layout>
 <script>
-  document.addEventListener("astro:page-load", () => {
+  function rememberListUrl() {
     const index = document.querySelector<HTMLElement>("[data-layout='index']");
     if (index)
       sessionStorage.setItem(
         "backUrl",
         index.dataset.homePath ?? import.meta.env.BASE_URL
       );
-  });
+  }
+  rememberListUrl();
 </script>

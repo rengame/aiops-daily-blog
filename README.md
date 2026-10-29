@@ -31,7 +31,7 @@ BASE_PATH=/ npm run preview -- --port 4322
 
 详见 [内容接口](docs/content-pipeline.md)。本次导入 2026-10-27、28、29 三期现有真实日报；保留原文、日期精度限制与历史补充说明。日报期号不是各条原文的发布日期。
 
-**此站不会自动从 ChatGPT Space 读取内容，也未启用新的采集/发送调度。** Space → GitHub 的后续同步需要明确的导出/提交步骤；现在的更新接口是已审查的 Markdown 提交。不要同时启用第二套日报采集。
+**已配置并启用外部定时同步**：从 2026-10-30 起，计划每天北京时间约 09:30（弹性调度）将现有 Space 日报原文同步到 `content/daily`，再由 GitHub Pages CI 构建发布。同步不重新生成摘要，不修改旧采集流程；成功或无变更时静默，异常时通知。**首个无人值守周期尚待验证**，配置完成不等于已验证自动运行成功。
 
 ## 独立公开博客仓库
 
@@ -43,9 +43,9 @@ BASE_PATH=/ npm run preview -- --port 4322
 
 - Settings → Pages → Source 选择 **GitHub Actions**。
 - 默认 `SITE_URL=https://rengame.github.io`、`BASE_PATH=/aiops-daily-blog/`。
-- 预期正式地址：`https://rengame.github.io/aiops-daily-blog/`。只有远程 CI 与线上页面验收后才算部署成功。
+- 正式地址：`https://rengame.github.io/aiops-daily-blog/`。首次上线提交 `1880c205` 的远程 CI 与 Pages 已成功；后续修复须按各自提交重新回归，详见 [验收记录](docs/ACCEPTANCE.md)。
 - 本仓库和站点均为公开；**草稿标记只阻止网站生成，不会让已提交到公开 Git 的原文保密**。私人草稿不得放进此仓库。
-- 不依赖原仓库的 `digest-data` 分支，不更改原有采集/发送流程。现有 Space 日报仍需显式导出并审阅为 Markdown 提交；本次未声称已经自动同步。
+- 不依赖原仓库的 `digest-data` 分支，不更改原有采集/发送流程。现有 Space 日报通过已配置的外部定时同步提交 Markdown；首个无人值守周期尚待验证。
 
 ## 验收重点
 

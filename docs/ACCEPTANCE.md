@@ -1,25 +1,38 @@
 # 实现验收记录（2026-10-29）
 
-## 已验证
+## 首次上线版本：已验证
 
-- 官方 AstroPaper 6.1.0 模板来源与 MIT 许可；锁文件解析到 Astro 7.4.4、Pagefind 1.5.2 Extended。
-- Node 24，`npm ci` 成功；`npm run check` 成功；`npm run format:check` 成功。
-- 18 项 Node 测试：日期合法性、确定性转换、同日重复零修改、同日更正、重复期号拒绝、图片路径/哈希复制/替代文字、凭据检测、非法 HTML、空输入、draft/featured 保留与类型校验。
-- 3 份真实日报源文件与输入 SHA256 一致；无模板示例混入。
-- Astro 检查 58 文件：0 error、0 warning、0 hint。
-- 12 个静态 HTML 页面，3 篇已发布日报；年月归档、专题、RSS、站点图、404、关于页 Markdown 插图。
-- Pagefind Extended：`zh-cn`，3 篇、1305 个索引词。中文采用分词，日志中的“不支持 stemming”不表示不支持中文分词。
-- `/aiops-daily/` 和 `/` 两种 base 均构建成功；自动检查所有 HTML 本地 href/src、RSS 路径、站点图和中文索引通过。
-- 发现并修复 RSS 链接被 trailingSlash 追加 `/` 的问题。
-- 全部远端字体请求移除；运行网站不需要 API Key、SSR 或数据库。
+- 独立公开仓库 `rengame/aiops-daily-blog`，首次上线提交短 SHA **`1880c205`**：远程 CI 成功、GitHub Pages 已上线。
+- 正式地址：<https://rengame.github.io/aiops-daily-blog/>。
+- 该版本为 **18 项测试**，不是下述本轮 22 项测试的修复版本。
+- 浏览器已验证：搜索中文「故障」得到 3 条结果；400 CSS px 窄屏菜单展开/关闭、明暗主题切换、图片实际加载均正常，未发现横向溢出。
+- 浏览器验收发现 10/28 标题误取正文「今日重点」以及搜索控件文案回落英文，已在下一节的本地修复中处理。首次上线通过不代表这些后续修改已在线上回归。
 
-## 尚需外部验收
+## 本轮 UI 修复：本地通过，尚未上传或线上回归
 
-- 浏览器视觉、手机导航、主题切换、中文搜索结果、清除/返回/前进、图片显示：由私有演示浏览器验收，不能由上面的静态测试替代。
-- 远程 GitHub CI、Pages 权限/套餐、实际线上 URL：必须在精确提交推送后核验。本地通过不代表已经部署。
-- 私有演示根构建的 canonical/RSS 域名暂用 `https://example.invalid`；正式构建默认 `https://rengame.github.io/aiops-daily-blog/`，演示真实域名确定后可重建。
-- 没有重新核查每篇来源事实；保留原日报证据边界。
-- Space → GitHub 未建立自动同步，也未启动新的采集或发送任务。
+- 10/28 标题恢复 `AIOps 日报｜2026-10-28`；只有显式 frontmatter 标题可覆盖期号标题，正文一级章节标题不再被误用或删除。
+- Pagefind 搜索输入、清除、结果数量、空结果与 ARIA 文案显式使用中文；清除搜索同时移除 URL 查询参数。
+- 移除 ClientRouter 和页面过渡生命周期依赖，使用普通链接整页导航；主题初始化兼容 DOMContentLoaded 与浏览器前进后退缓存。
+- **22 项测试**、lint、格式检查、Astro 类型检查全部通过；Astro 检查 60 文件，0 error、0 warning、0 hint。
+- 生成 12 个静态 HTML 页面、3 篇已发布日报；中文 Pagefind 索引仍为 3 篇。所有本地链接和资源、RSS、站点图及 `/aiops-daily-blog/` 子路径校验通过。
+- **本轮修复尚未上传上线回归**：后续必须核对新提交的远程 CI 和 Pages，并复测标题、中文搜索/空结果/清除、原生前进后退、返回列表、手机菜单与主题切换。
+
+## 内容、实现与安全边界
+
+- 官方 AstroPaper 6.1.0 模板来源与 MIT 许可；锁文件解析到 Astro 7.4.4、Pagefind 1.5.2 Extended。Node 24，`npm ci` 可复现。
+- 三份真实日报（2026-10-27、28、29）原始文件 SHA256 与输入一致；本轮仅改派生标题和网站代码，不改三份源正文，无模板示例混入。
+- 具备时间归档、专题、RSS、站点图、404、关于页 Markdown 插图；全部远端字体请求已移除。运行网站不需要 SSR、数据库或 API Key。
+- 中文索引使用分词；日志中的「不支持 stemming」不表示不支持中文分词。未重新核查每篇来源事实，保留原日报证据边界。
+- 原始 HTML（含 HTML img）拒绝导入；本地 Markdown 图片只接受签名匹配、最大 10 MiB 的 PNG/JPEG/GIF/WebP。独立临时 PNG 构建探针已验证实际生成正确子路径资源，验收样稿已删除。
+- 已修正 RSS 尾斜线、RSS 频道主页及 robots 的子路径 sitemap；独立草稿构建探针确认草稿不进入页面、列表、标签、RSS、站点图或搜索，验收样稿已删除。
+- 草稿标记不是公开 Git 仓库的保密机制。发布范围仅网站代码、已审阅的公开日报和图片，不含私有来源记录、内部页面标识、凭据、状态或采集配置；原私有采集仓库未修改。
+
+## 外部定时同步：已配置，首轮待验证
+
+- 已配置并启用外部定时同步，计划从 **2026-10-30** 起每天北京时间 **约 09:30** 执行；采用弹性调度，不承诺精确分钟。
+- 路径为：现有 Space 日报原文 → `content/daily/YYYY-MM-DD.md` → GitHub Pages CI。同步不重新生成摘要，不修改或重复启动旧采集流程。
+- 成功或无变更时静默，异常时通知。内部任务、页面标识及凭据不写入仓库。
+- **首个无人值守周期尚待验证**；配置完成不等于首轮同步或自动发布已验收。首轮应核对原文、期号幂等、新提交 CI 与线上页面。
 
 ## 可复现命令
 
@@ -27,16 +40,6 @@
 npm ci
 npm run check
 npm run format:check
-BASE_PATH=/ SITE_URL=https://example.invalid npm run build
 ```
 
-当前沙箱需要把 npm/配置缓存指向可写临时目录：`npm_config_cache=/tmp/aiops-npm-cache XDG_CONFIG_HOME=/tmp/aiops-config ASTRO_TELEMETRY_DISABLED=1`。这不是应用的生产前置条件。
-
-## 独立公开仓库复核
-
-- 源码直接在仓库根目录，默认 base 为 `/aiops-daily-blog/`。原有私有采集仓库未修改。
-- 发布范围仅网站源码、三期已审阅的公开日报和静态图片；不包含私有来源记录、内部链接、凭据、状态或采集配置。
-- Draft 不是公开 Git 仓库的保密机制；只过滤静态页面、列表、RSS、站点图与搜索索引。
-
-- 独立复核通过：子路径 robots sitemap 与 RSS 频道主页修正；真实构建注入草稿样稿，页面、列表、标签、RSS、站点图均无草稿，中文索引仍为三篇。验收样稿已移除。
-- 原始 HTML（含 HTML img）拒绝导入，图片使用标准 Markdown；本地图片只接受带匹配文件签名且不超过 10 MiB 的 PNG/JPEG/GIF/WebP。
+当前沙箱使用可写临时缓存：`npm_config_cache=/tmp/aiops-npm-cache XDG_CONFIG_HOME=/tmp/aiops-config ASTRO_TELEMETRY_DISABLED=1`，这不是生产前置条件。多目录验收应安装独立依赖，避免共享构建缓存。

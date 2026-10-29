@@ -64,7 +64,7 @@ test("existing frontmatter title and tags are honored without rewriting article 
   assert.equal(fields.title, "中文日报");
   assert.deepEqual(fields.tags, ["运维", "MCP"]);
   assert.match(output, /发布日期：2026-10-28。首次发现：2026-10-29。/);
-  assert.doesNotMatch(output, /^# /);
+  assert.match(output, /^\s*# 中文日报\n/);
 });
 
 test("missing, impossible and conflicting issue dates fail rather than guess", () => {
@@ -312,4 +312,33 @@ test("local images reject active formats, wrong signatures and oversized files b
     assert.throws(() => importDailies(f), expected);
     assert.throws(() => statSync(f.out), /ENOENT/);
   }
+});
+
+test("body section H1s never become the issue title or disappear", () => {
+  for (const original of [
+    "本期导语。\n\n# 今日重点\n\n保留章节内容。\n\n# 资讯详情\n\n正文。\n",
+    "# 今日重点\n\n保留开头章节。\n",
+  ]) {
+    const converted = convertDaily(original, "2026-10-28.md");
+    const parsed = parseFrontmatter(converted.content);
+    assert.equal(parsed.fields.title, "AIOps 日报｜2026-10-28");
+    assert.equal(parsed.body.trim(), original.trim());
+    assert.deepEqual(
+      convertDaily(converted.content, converted.filename),
+      converted
+    );
+  }
+});
+
+test("real 2026-10-28 source keeps all section headings with canonical issue title", () => {
+  const original = readFileSync(
+    new URL("../content/daily/2026-10-28.md", import.meta.url),
+    "utf8"
+  );
+  const converted = convertDaily(original, "2026-10-28.md");
+  const parsed = parseFrontmatter(converted.content);
+  assert.equal(parsed.fields.title, "AIOps 日报｜2026-10-28");
+  assert.equal(parsed.body.trim(), original.trim());
+  assert.match(parsed.body, /# 今日重点/);
+  assert.match(parsed.body, /# 资讯详情/);
 });

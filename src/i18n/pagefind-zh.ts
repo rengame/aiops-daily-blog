@@ -1,0 +1,20 @@
+/** Explicit UI strings: do not depend on Pagefind's locale fallback for zh-CN. */
+export const pagefindZh = {
+  language: "zh-CN",
+  placeholder: "搜索日报…",
+  clear_search: "清除搜索",
+  load_more: "加载更多结果",
+  search_label: "搜索日报全文",
+  filters_label: "筛选搜索结果",
+  zero_results: "未找到与「[SEARCH_TERM]」相关的结果",
+  one_result: "找到 [COUNT] 条与「[SEARCH_TERM]」相关的结果",
+  many_results: "找到 [COUNT] 条与「[SEARCH_TERM]」相关的结果",
+  searching: "正在搜索「[SEARCH_TERM]」…",
+  results_label: "搜索结果",
+  total_zero_results: "没有搜索结果",
+  total_one_result: "共 [COUNT] 条结果",
+  total_many_results: "共 [COUNT] 条结果",
+  error_search: "搜索暂时失败，请重试",
+  input_hint: "输入关键词后显示结果",
+  loading: "加载中",
+};

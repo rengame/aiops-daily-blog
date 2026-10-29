@@ -219,8 +219,6 @@ const isActive = (path: string) => {
   }
 
   toggleNav();
-  document.addEventListener("astro:after-swap", toggleNav);
 
   handleSkipToContent();
-  document.addEventListener("astro:after-swap", handleSkipToContent);
 </script>

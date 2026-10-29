@@ -8,7 +8,6 @@ import Tag from "@/components/Tag.astro";
 import { getPostSlug, getPostUrl } from "@/utils/getPostPaths";
 import { getSortedPosts } from "@/utils/getSortedPosts";
 import { slugifyStr } from "@/utils/slugify";
-import { toTransitionName } from "@/utils/toTransitionName";
 import EditPost from "./_components/EditPost.astro";
 import ShareLinks from "./_components/ShareLinks.astro";
 import BackButton from "./_components/BackButton.astro";
@@ -115,7 +114,6 @@ const ogImage = ogImageUrl
   >
     <h1
       data-pagefind-meta="title"
-      style={{ viewTransitionName: toTransitionName(post.id) }}
       class="text-accent inline-block text-2xl font-bold sm:text-3xl"
     >
       {title}
@@ -165,7 +163,7 @@ const ogImage = ogImageUrl
   <Footer />
 </PostLayout>
 
-<script is:inline data-astro-rerun>
+<script is:inline>
   function createProgressBar() {
     const progressContainer = document.createElement("div");
     progressContainer.className =
@@ -519,14 +517,6 @@ const ogImage = ogImageUrl
   }
   initLightbox();
 
-  if (!window.__lightboxSwapBound) {
-    window.__lightboxSwapBound = true;
-    document.addEventListener("astro:before-swap", () =>
-      window.__closeLightbox?.()
-    );
-  }
-
-  document.addEventListener("astro:after-swap", () =>
-    window.scrollTo({ left: 0, top: 0, behavior: "instant" })
-  );
+  // Native navigation owns history and scroll restoration; close overlays on exit.
+  window.addEventListener("pagehide", () => window.__closeLightbox?.());
 </script>

@@ -47,22 +47,17 @@ function setup(): void {
   });
 }
 
-setup();
+// Plain static navigation: initialize once for each document.
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", setup, { once: true });
+} else {
+  setup();
+}
 
-// Re-run after View Transitions navigation.
-document.addEventListener("astro:after-swap", setup);
-
-// Carry the theme-color value across View Transitions to prevent the
-// Android navigation bar from flashing during page transitions.
-document.addEventListener("astro:before-swap", event => {
-  const color = document
-    .querySelector("meta[name='theme-color']")
-    ?.getAttribute("content");
-  if (color) {
-    (event as { newDocument: Document }).newDocument
-      .querySelector("meta[name='theme-color']")
-      ?.setAttribute("content", color);
-  }
+// A browser back/forward cache can restore an older document theme.
+window.addEventListener("pageshow", () => {
+  themeValue = getPreferredTheme();
+  reflect();
 });
 
 // Sync with OS-level dark/light preference changes.

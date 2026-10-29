@@ -202,12 +202,12 @@ export function convertDaily(text, filename) {
     throw new Error(
       `${path.basename(filename)}: filename and frontmatter dates disagree`
     );
-  const h1 = originalBody.match(/^#\s+(.+)$/m);
-  const title = fields.title ?? h1?.[1] ?? `AIOps 日报｜${date}`;
+  // Only explicit metadata can override the issue title; H1s may be body sections.
+  const title = fields.title ?? `AIOps 日报｜${date}`;
   if (typeof title !== "string" || !title.trim())
     throw new Error("title must be non-empty text");
-  // Only remove a leading H1: the page template already renders the title.
-  const body = originalBody.replace(/^\s*#\s+[^\n]+\n+/, "").trim() + "\n";
+  // Preserve all body headings; only normalize surrounding whitespace deterministically.
+  const body = originalBody.trim() + "\n";
   const tags = fields.tags ?? [
     "AIOps",
     ...(/^#{1,6}\s+.*Agent/im.test(body) ? ["Agent"] : []),

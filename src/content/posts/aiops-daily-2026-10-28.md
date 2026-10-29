@@ -1,5 +1,5 @@
 ---
-title: "今日重点"
+title: "AIOps 日报｜2026-10-28"
 description: "本期收录 7 条相关资讯，另附 1 篇历史补充阅读。重点是故障材料整理、调查 Agent 的共享文件访问、Agent 权限与资产管理，以及批处理恢复和云平台变更。"
 pubDatetime: 2026-10-28T08:00:00+08:00
 author: "AIOps Daily"
