@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.astro/
+public/pagefind/
+package-lock.json
+content/daily/
+src/content/posts/
+docs/ASTROPAPER-UPSTREAM.md
+
+dist-root/

@@ -1,0 +1,31 @@
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --font-app:
+    "Inter", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui,
+    sans-serif;
+}
+:root,
+[data-theme="light"] {
+  --background: #fbfaf7;
+  --foreground: #222b29;
+  --accent: #17664e;
+  --accent-foreground: #ffffff;
+  --muted: #edf0e9;
+  --muted-foreground: #67716b;
+  --border: #dce2d9;
+}
+[data-theme="dark"] {
+  --background: #151c1a;
+  --foreground: #e1e9e2;
+  --accent: #91d5b1;
+  --accent-foreground: #15231b;
+  --muted: #24312a;
+  --muted-foreground: #a4b1a7;
+  --border: #34433a;
+}

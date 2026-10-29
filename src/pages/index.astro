@@ -1,0 +1,164 @@
+---
+import { getCollection } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import IconRss from "@/assets/icons/IconRss.svg";
+import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Card from "@/components/Card.astro";
+import LinkButton from "@/components/LinkButton.astro";
+import { getSortedPosts } from "@/utils/getSortedPosts";
+import { getPostUrl } from "@/utils/getPostPaths";
+import { getAssetPath } from "@/utils/withBase";
+import config from "@/config";
+const locale = Astro.currentLocale ?? config.site.lang;
+const posts = getSortedPosts(await getCollection("posts"));
+const latest = posts[0];
+const recent = posts.slice(1, config.posts.perIndex + 1);
+const homePath = getRelativeLocaleUrl(locale, "");
+const latestDate = latest?.data.pubDatetime.toLocaleDateString("zh-CN", {
+  timeZone: "Asia/Shanghai",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<Layout>
+  <Header />
+  <main
+    id="main-content"
+    data-layout="index"
+    data-home-path={homePath}
+    class="app-layout"
+  >
+    <section
+      class="hero border-border border-b py-12 sm:py-16"
+      aria-labelledby="hero-title"
+    >
+      <div
+        class="text-accent mb-6 flex items-center gap-3 font-mono text-xs tracking-widest"
+      >
+        <span class="bg-accent h-1.5 w-1.5 rounded-full" aria-hidden="true"
+        ></span>
+        THE AIOPS FIELD NOTES
+      </div>
+      <h1
+        id="hero-title"
+        class="max-w-xl text-4xl leading-tight font-semibold tracking-tight sm:text-5xl"
+      >
+        让技术进展，<br /><span class="text-accent">沉淀为实践。</span>
+      </h1>
+      <p class="text-muted-foreground mt-6 max-w-lg text-base leading-8">
+        关注 AIOps、Agent 开发与智能运维。<br
+          class="hidden sm:block"
+        />每天一份中文选读，保留原始来源与判断边界。
+      </p>
+      <div class="mt-7 flex flex-wrap gap-3">
+        <a
+          class="bg-accent text-accent-foreground inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium"
+          href={latest
+            ? getPostUrl(latest.id, latest.filePath, locale)
+            : getRelativeLocaleUrl(locale, "posts")}
+          >阅读最新一期 <IconArrowRight class="size-4" /></a
+        >
+        <a
+          class="border-border inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm"
+          href={getAssetPath("rss.xml")}><IconRss class="size-4" /> RSS 订阅</a
+        >
+      </div>
+      <div
+        class="text-muted-foreground mt-10 flex flex-wrap gap-x-5 gap-y-2 text-xs"
+      >
+        <span>{posts.length} 期已归档</span><span>中文全文搜索</span><span
+          >Markdown 驱动</span
+        >
+      </div>
+    </section>
+    {
+      latest && (
+        <section
+          class="border-border border-b py-9"
+          aria-labelledby="latest-title"
+        >
+          <div class="mb-5 flex items-center justify-between">
+            <>
+              <h2
+                id="latest-title"
+                class="text-sm font-semibold tracking-wider"
+              >
+                最新一期
+              </h2>
+              <span class="text-muted-foreground text-xs">
+                {latestDate} · 北京时间
+              </span>
+            </>
+          </div>
+          <ul class="latest-card">
+            <Card variant="h3" {...latest} />
+          </ul>
+        </section>
+      )
+    }
+    {
+      recent.length > 0 && (
+        <section class="py-9" aria-labelledby="archive-title">
+          <div class="flex items-center justify-between">
+            <>
+              <h2
+                id="archive-title"
+                class="text-sm font-semibold tracking-wider"
+              >
+                往期日报
+              </h2>
+              <LinkButton
+                href={getRelativeLocaleUrl(locale, "archives")}
+                class="text-muted-foreground text-xs"
+              >
+                时间归档 <IconArrowRight class="size-4" />
+              </LinkButton>
+            </>
+          </div>
+          <ul class="divide-border divide-y">
+            {recent.map(post => (
+              <Card variant="h3" {...post} />
+            ))}
+          </ul>
+          <div class="mt-6">
+            <LinkButton
+              href={getRelativeLocaleUrl(locale, "posts")}
+              class="text-accent text-sm"
+            >
+              查看全部日报 <IconArrowRight class="size-4" />
+            </LinkButton>
+          </div>
+        </section>
+      )
+    }
+    {
+      posts.length === 0 && (
+        <p class="py-10">
+          尚无已发布日报。请先将真实 Markdown 日报加入 content/daily。
+        </p>
+      )
+    }
+    <aside class="bg-muted mb-12 rounded-lg px-5 py-4 text-sm leading-7">
+      <strong class="font-medium">阅读说明</strong><p
+        class="text-muted-foreground"
+      >
+        本刊是技术选读，不是完整的厂商发布账本。案例成效、预览状态与日期精度，以每期的证据说明为准。
+      </p>
+    </aside>
+  </main>
+  <Footer />
+</Layout>
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const index = document.querySelector<HTMLElement>("[data-layout='index']");
+    if (index)
+      sessionStorage.setItem(
+        "backUrl",
+        index.dataset.homePath ?? import.meta.env.BASE_URL
+      );
+  });
+</script>
