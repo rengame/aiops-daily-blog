@@ -46,3 +46,13 @@ test("navigation remains native without ClientRouter or transition lifecycle dep
   assert.match(source("src/scripts/theme.ts"), /DOMContentLoaded/);
   assert.match(source("src/scripts/theme.ts"), /pageshow/);
 });
+
+test("adjacent post links share a two-column row on mobile and desktop", () => {
+  const nav = source(
+    "src/pages/posts/[...slug]/_components/AdjacentPostNav.astro"
+  );
+  assert.match(nav, /grid grid-cols-2 items-start/);
+  assert.doesNotMatch(nav, /grid-cols-1|sm:col-start-2/);
+  assert.match(nav, /col-start-2 flex min-w-0 items-start/);
+  assert.equal((nav.match(/text-sm wrap-anywhere/g) ?? []).length, 2);
+});
