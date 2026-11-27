@@ -1,6 +1,6 @@
 ---
 title: "Uber 如何评估每月 100 万次 Agent 技能调用"
-pubDatetime: 2026-11-27T00:26:46.679Z
+pubDatetime: 2026-11-27T08:26:51+08:00
 author: "AIOps Daily"
 description: "从 Git 分发到对照评测，Uber 如何验证一个 Skill 值不值得保留。"
 tags: ["AIOps", "Agent"]

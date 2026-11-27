@@ -1,6 +1,6 @@
 ---
 title: "用 Google Antigravity 和 Gemini 4 Neon 编排 Agent 团队"
-pubDatetime: 2026-11-27T00:26:46.679Z
+pubDatetime: 2026-11-27T08:26:51+08:00
 author: "AIOps Daily"
 description: "codila 实践文章的中文导读：何时用单 Agent、编排器和并行协作。"
 tags: ["AIOps", "Agent"]
